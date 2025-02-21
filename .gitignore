@@ -1,3 +1,5 @@
-.env*
+# Environment files
+.env
 
-resource.env
+# Node modules
+node_modules
