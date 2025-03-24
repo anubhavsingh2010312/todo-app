@@ -1,29 +1,29 @@
 import { useState, useEffect } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import axios from 'axios';
 import { CreateTodo } from './components/CreateTodo';
 import { RenderTodo } from './components/Todos';
+import { FetchTodo } from './components/FetchComponents';
 
 function App() {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/todos")
-      .then(async (res) => {
-        const json = await res.json();
-        if (Array.isArray(json)) {
-          setTodos(json); // Ensure the response is an array
-        } else {
-          console.error('Unexpected response format:', json);
-        }
+    axios.get("http://localhost:3000/todos")
+      .then((res) => {
+        setTodos(res.data); // Ensure the response is an array
       })
       .catch((error) => console.error('Error fetching todos:', error));
   }, []);
 
+  const addTodo = (newTodo) => {
+    setTodos((prevTodos) => (Array.isArray(prevTodos) ? [...prevTodos, newTodo] : [newTodo]));
+  };
+
   return (
     <div>
-      <CreateTodo />
+      <CreateTodo addTodo={addTodo} />
       <RenderTodo todos={todos} />
+      <FetchTodo />
     </div>
   );
 }
