@@ -1,55 +1,104 @@
 import React, { useState } from 'react';
 
 export function CreateTodo({ addTodo }) {
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [dueDate, setDueDate] = useState('');
+    const [priority, setPriority] = useState('Medium'); // New state for priority
 
     return (
-        <div>
+        <div
+            style={{
+                backgroundColor: 'white',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                borderRadius: '8px',
+                padding: '20px',
+                textAlign: 'left',
+                boxSizing: 'border-box', // Ensure the card respects padding
+            }}
+        >
+            <h2 style={{ marginBottom: '20px', color: '#4CAF50' }}>Create Todo</h2>
             <input
                 style={{
-                    padding: '10px',
-                    margin: '10px',
+                    width: '100%',
+                    padding: '10px 15px', // Padding on all sides
+                    marginBottom: '10px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    boxSizing: 'border-box', // Ensure padding is included in width
                 }}
                 type="text"
-                placeholder="title"
+                placeholder="Title"
+                value={title}
                 onChange={(e) => setTitle(e.target.value)}
-            /> <br />
+            />
+            <textarea
+                style={{
+                    width: '100%',
+                    padding: '10px 15px', // Padding on all sides
+                    marginBottom: '10px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    resize: 'none',
+                    boxSizing: 'border-box', // Ensure padding is included in width
+                }}
+                placeholder="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+            />
+            <select
+                style={{
+                    width: '100%',
+                    padding: '10px 15px',
+                    marginBottom: '10px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    boxSizing: 'border-box',
+                    resize: 'none',
+                }}
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+            >
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
             <input
                 style={{
-                    padding: '10px',
-                    margin: '10px',
+                    width: '100%',
+                    padding: '10px 15px',
+                    marginBottom: '10px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    boxSizing: 'border-box',
+                    resize: 'none',
                 }}
-                type="text"
-                placeholder="description"
-                onChange={(e) => setDescription(e.target.value)}
-            /> <br />
-
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+            />
             <button
                 style={{
-                    padding: '10px',
-                    margin: '10px',
+                    backgroundColor: '#4CAF50',
+                    color: 'white',
+                    border: 'none',
+                    padding: '10px 20px',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
                 }}
                 onClick={() => {
-                    fetch("http://localhost:3000/todo", {
-                        method: "POST",
-                        body: JSON.stringify({
-                            title: title,
-                            description: description,
-                        }),
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    })
-                        .then(async (res) => {
-                            const json = await res.json();
-                            addTodo(json); // Add the new todo to the list
-                            alert("Todo added");
-                        })
-                        .catch((error) => console.error('Error adding todo:', error));
+                    if (title && description) {
+                        addTodo({ title, description, dueDate, priority, completed: false });
+                        setTitle('');
+                        setDescription('');
+                        setDueDate('');
+                        setPriority('Medium');
+                    } else {
+                        alert('Please fill in both fields');
+                    }
                 }}
             >
-                Add a todo
+                Add Todo
             </button>
         </div>
     );

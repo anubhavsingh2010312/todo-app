@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 export function FetchTodo() {
-    const [todoTitle, setTodoTitle] = useState('');
+    const [todoId, setTodoId] = useState('');
     const [todo, setTodo] = useState(null);
     const [error, setError] = useState('');
 
-    const fetchTodoByTitle = () => {
-        if (!todoTitle) {
-            setError('Please enter a valid Todo title');
+    const fetchTodoById = () => {
+        if (!todoId) {
+            setError('Please enter a valid Todo Id');
             return;
         }
 
         axios
-            .get(`http://localhost:3000/todo?title=${encodeURIComponent(todoTitle)}`)
+            .get(`http://localhost:3000/todofind?id=${encodeURIComponent(todoId)}`)
             .then((res) => {
                 if (res.data) {
                     setTodo(res.data);
@@ -33,13 +33,13 @@ export function FetchTodo() {
         <div>
             <input
                 type="text"
-                placeholder="Enter Todo Title"
-                value={todoTitle}
-                onChange={(e) => setTodoTitle(e.target.value)}
+                placeholder="Enter Todo ID"
+                value={todoId}
+                onChange={(e) => setTodoId(e.target.value)}
                 style={{ padding: '10px', margin: '10px' }}
             />
             <button
-                onClick={fetchTodoByTitle}
+                onClick={fetchTodoById}
                 style={{ padding: '10px', margin: '10px' }}
             >
                 Fetch Todo
